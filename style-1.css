@@ -1,0 +1,15 @@
+
+/* Root elements */
+body {
+    margin: 0;
+    padding: 0;
+}
+
+
+/* Elements */
+#game-1 {
+    display: block;
+    justify-self: center;
+    background-color: #e9c3c3;
+    border: solid 2px black;
+}
