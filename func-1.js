@@ -42,6 +42,7 @@ class Vector{
     drawPos(xpos, ypos, m, color){
         shape.beginPath(); shape.moveTo(xpos, ypos); shape.lineTo(xpos+this.x*m, ypos+this.y*m);
         shape.strokeStyle = color; shape.stroke();
+        shape.closePath();
     }
 
 }
@@ -55,15 +56,25 @@ class Ball{
         this.radius = r;
         this.canControl = false;
         this.static = false;
+        this.theImage = null;
         balls.push(this);
     }
 
     draw(){
+        if(this.theImage != null){ shape.save(); }
         shape.beginPath();
         shape.arc(this.pos.x, this.pos.y, this.radius, 0, 2*Math.PI);
         shape.stroke();
         shape.fillStyle = "red";
         shape.fill();
+        if(this.theImage != null){
+            shape.closePath();
+            shape.clip();
+            shape.drawImage(this.theImage, this.pos.x - this.radius, this.pos.y - this.radius,
+                this.radius*2, this.radius*2
+            );
+            shape.restore();
+        }
     }
 
     inCollision(other){
@@ -95,12 +106,18 @@ class Ball{
     }
 }
 
+const image1 = new Image();
+const image2 = new Image();
+image1.src = './bruh.png';
+image2.src = './yer.png';
 let mainBall = new Ball(100, 100, 30);
+let ball4 = new Ball(300, 400, 30);
 let ball2 = new Ball(100, 200, 40);
 let ball3 = new Ball(100, 300, 25);
 ball2.static = true;
+ball2.theImage = image1;
+ball4.theImage = image2;
 mainBall.acceleration = 0.4;
-
 
 //Variables
 let xtest = 0;
@@ -219,21 +236,7 @@ function repeats(){
                 }
             }
         }
-//        balls.forEach((ball2, ind2) => {
-//            if(ind1 != ind2){
-//                let colliding = ball.inCollision(ball2);
-//                if(colliding){
-//                    if(!ball.static){
-//                        pen_res_only(ball, ball2);
-//                    }
-//                }
-//            }
-//        });
     });
-    //let coll = mainBall.inCollision(ball3);
-    //if(coll){
-    //    collideResponse(mainBall, ball3);
-    //}
     requestAnimationFrame(repeats);
 }
 requestAnimationFrame(repeats);
